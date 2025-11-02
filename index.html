@@ -1,200 +1,82 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Play Points - مكافآت فري فاير</title>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <title>ɡооɡӏе-рӏау-роіnt</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
     body {
-      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
+      font-family: 'Roboto', sans-serif;
+      background-color: #f5f5f5;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
+      height: 100vh;
+      margin: 0;
     }
 
     .container {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 48px 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-      max-width: 480px;
-      width: 100%;
       text-align: center;
-      animation: fadeIn 0.5s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .logo-container {
-      margin-bottom: 32px;
-    }
-
-    .logo-container img {
-      width: 180px;
-      height: auto;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
-    }
-
-    .badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
     }
 
     h1 {
-      color: #202124;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      line-height: 1.3;
-    }
-
-    .reward-amount {
       color: #4285F4;
-      font-size: 48px;
-      font-weight: 700;
-      margin: 24px 0;
-      text-shadow: 0 2px 4px rgba(66, 133, 244, 0.2);
-    }
-
-    .reward-icon {
-      font-size: 64px;
-      margin: 16px 0;
+      font-size: 26px;
+      font-weight: 500;
+      margin-top: 10px;
     }
 
     p {
-      color: #5f6368;
+      color: #5F6368;
       font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 32px;
+      margin-top: 8px;
     }
 
-    .features {
-      background: #f8f9fa;
-      border-radius: 16px;
-      padding: 20px;
-      margin: 24px 0;
-      text-align: right;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin: 12px 0;
-      color: #202124;
-      font-size: 14px;
-    }
-
-    .feature-item::before {
-      content: "✓";
-      color: #34A853;
-      font-weight: bold;
-      font-size: 18px;
-      margin-left: 12px;
-    }
-
-    .claim-button {
-      background: linear-gradient(135deg, #4285F4 0%, #1a73e8 100%);
+    button {
+      background-color: #4285F4;
       color: white;
       border: none;
-      padding: 16px 48px;
+      padding: 12px 30px;
       font-size: 16px;
       font-weight: 500;
-      border-radius: 28px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
-      letter-spacing: 0.5px;
-      width: 100%;
-      max-width: 320px;
+      margin-top: 30px;
+      transition: background-color 0.3s;
     }
 
-    .claim-button:hover {
-      background: linear-gradient(135deg, #1a73e8 0%, #174ea6 100%);
-      box-shadow: 0 6px 20px rgba(66, 133, 244, 0.5);
-      transform: translateY(-2px);
+    button:hover {
+      background-color: #357ae8;
     }
 
-    .claim-button:active {
-      transform: translateY(0);
+    img {
+      width: 150px;
+      margin-bottom: 20px;
     }
 
-    .footer-text {
-      margin-top: 24px;
-      font-size: 12px;
-      color: #80868b;
+    footer {
+      font-size: 14px;
+      color: #9e9e9e;
+      margin-top: 30px;
     }
 
-    @media (max-width: 480px) {
-      .container {
-        padding: 32px 24px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .reward-amount {
-        font-size: 40px;
-      }
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo-container">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png" alt="Google Logo">
-    </div>
-
-    <div class="badge">🎁 عرض حصري</div>
-
-    <h1>مكافأة Google Play Points</h1>
-
-    <div class="reward-icon">💎</div>
-    <div class="reward-amount">600</div>
-
-    <p>جوهرة مجانية في فري فاير</p>
-
-    <div class="features">
-      <div class="feature-item">تفعيل فوري للمكافأة</div>
-      <div class="feature-item">آمن ومضمون 100%</div>
-      <div class="feature-item">متوافق مع جميع الحسابات</div>
-      <div class="feature-item">بدون رسوم إضافية</div>
-    </div>
-
-    <button class="claim-button" onclick="location.href='eligibility.html'">
-      المطالبة بالمكافأة الآن
-    </button>
-
-    <p class="footer-text">
-      عرض محدود • شروط وأحكام تطبق
-    </p>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png" alt="Google Logo">
+    <h1>مكافأة 600 جوهرة في فري فاير</h1>
+    <p>سيكون حسابك مؤهلاً لهذا العرض.</p>
+    <button onclick="location.href='eligibility.html'">المطالبة بهذه المكافأة</button>
+    <footer>
+      <p>هذا العرض متاح فقط للمستخدمين في الولايات المتحدة الأمريكية</p>
+    </footer>
   </div>
 </body>
 </html>
